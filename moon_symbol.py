@@ -76,18 +76,18 @@ def draw_moon_symbol(ax,
                    k=1.0005):
 
     # 0-360deg, 0 is the mew moon, and 180 is the full moon
-    if moon_phase == 0:
-        M_zoom = np.array([[zoom_factor* y_zoom_factor, 0,0], [0, zoom_factor ,0],[0,0,1]])
-        trans = Affine2D(M_zoom)
-        ring = Wedge((hour, day), .2, 0, 360, width=0.05, color=light_color, zorder=1000).get_path()
-        ring.cleaned(transform=trans)
-        ring_patch = mpatches.PathPatch(ring,
-                                    facecolor=light_color,
-                                    linewidth=0,
-                                    zorder=999)
-        ax.add_patch(ring_patch)
-        # ax.add_patch(Wedge((hour, day), .2, 0, 360, width=0.05, color=light_color, zorder=1000))
-        return None
+    # if moon_phase == 0:
+    #     M_zoom = np.array([[zoom_factor* y_zoom_factor, 0,0], [0, zoom_factor ,0],[0,0,1]])
+    #     trans = Affine2D(M_zoom)
+    #     ring = Wedge((hour, day), .2, 0, 360, width=0.05, color=light_color, zorder=1000).get_path()
+    #     ring.cleaned(transform=trans)
+    #     ring_patch = mpatches.PathPatch(ring,
+    #                                 facecolor=light_color,
+    #                                 linewidth=0,
+    #                                 zorder=999)
+    #     ax.add_patch(ring_patch)
+    #     # ax.add_patch(Wedge((hour, day), .2, 0, 360, width=0.05, color=light_color, zorder=1000))
+    #     return None
 
     if mares != True:
         if moon_phase < 25:

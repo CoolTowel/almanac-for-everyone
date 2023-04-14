@@ -423,39 +423,17 @@ while quarter_day <= days_in_year:
     moon_quarter_rise = moon_rise_masked[moon_rise_masked[:, 0] == quarter_day]
     moon_quarter_set = moon_set_masked[moon_set_masked[:, 0] == quarter_day]
     if moon_quarter_rise.size > 0: # rise 
-        if mq.quarter ==0 :
-            draw_moon_symbol(ax=ax,
-                         time=mq.time,
-                         moon_phase= mq.quarter,
-                         lms=lms,
-                         day=quarter_day,
-                         hour=moon_quarter_rise[0, 1],
-                         y_zoom_factor=1 / y_scale_factor,
-                         zoom_factor=0.1,
-                         mares=True)
-        else:
-            draw_moon_symbol(ax=ax,
-                            time=mq.time,
-                            moon_phase=90 * mq.quarter + 0.0001,
-                            lms=lms,
-                            day=quarter_day,
-                            hour=moon_quarter_rise[0, 1],
-                            y_zoom_factor=1 / y_scale_factor,
-                            zoom_factor=0.1,
-                            mares=True)
+        draw_moon_symbol(ax=ax,
+                        time=mq.time,
+                        moon_phase=90 * mq.quarter + 0.0001,
+                        lms=lms,
+                        day=quarter_day,
+                        hour=moon_quarter_rise[0, 1],
+                        y_zoom_factor=1 / y_scale_factor,
+                        zoom_factor=0.1,
+                        mares=True)
     if moon_quarter_set.size > 0: # set
-        if mq.quarter ==0 :
-            draw_moon_symbol(ax=ax,
-                         time=mq.time,
-                         moon_phase= mq.quarter,
-                         lms=lms,
-                         day=quarter_day,
-                         hour=moon_quarter_set[0, 1],
-                         y_zoom_factor=1 / y_scale_factor,
-                         zoom_factor=0.1,
-                         mares=True)
-        else:
-            draw_moon_symbol(ax=ax,
+        draw_moon_symbol(ax=ax,
                             time=mq.time,
                             moon_phase=90 * mq.quarter + 0.0001,
                             lms=lms,
