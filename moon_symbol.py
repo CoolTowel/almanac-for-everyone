@@ -61,39 +61,55 @@ def moon_psa(time):
 
 
 def draw_moon_symbol(ax,
-                   time,
-                   lms,
-                   moon_phase,
-                   day,
-                   hour,
-                   mares=False,
-                   obs=Observer(40, 0, 100),
-                   y_zoom_factor=1,
-                   zoom_factor=1,
-                   resolution=500,
-                   light_color=np.array([1.0, 253 / 255, 230 / 255]),
-                   shadow_color=0.15,
-                   k=1.0005):
+                     time,
+                     lms,
+                     moon_phase,
+                     day,
+                     hour,
+                     mares=False,
+                     obs=Observer(40, 0, 100),
+                     y_zoom_factor=1,
+                     zoom_factor=1,
+                     resolution=500,
+                     light_color=np.array([1.0, 253 / 255, 230 / 255]),
+                     shadow_color=0.15,
+                     k=1.0005):
 
     # 0-360deg, 0 is the mew moon, and 180 is the full moon
-    # if moon_phase == 0:
-    #     M_zoom = np.array([[zoom_factor* y_zoom_factor, 0,0], [0, zoom_factor ,0],[0,0,1]])
-    #     trans = Affine2D(M_zoom)
-    #     ring = Wedge((hour, day), .2, 0, 360, width=0.05, color=light_color, zorder=1000).get_path()
-    #     ring.cleaned(transform=trans)
-    #     ring_patch = mpatches.PathPatch(ring,
-    #                                 facecolor=light_color,
-    #                                 linewidth=0,
-    #                                 zorder=999)
-    #     ax.add_patch(ring_patch)
+    if mares == True:
+        zoom_factor *= 1.3
+
+    if moon_phase == 0:
+        M_zoom = np.array([[zoom_factor, 0], [0, zoom_factor * y_zoom_factor]])
+        ring_path = Wedge((0, 0),
+                          1,
+                          0,
+                          360,
+                          width=0.15,
+                          color=light_color,
+                          zorder=1000).get_path()
+        ring_vertices = ring_path.vertices
+        ring_code = ring_path.codes
+        ring_vertices = np.dot(ring_vertices, M_zoom.T)
+        ring_vertices[:,0] += hour 
+        ring_vertices[:,1] += day 
+        ring_path = mpath.Path(ring_vertices, ring_code)
+        ring = mpatches.PathPatch(ring_path,
+                                #   facecolor=[shadow_color]*3,
+                                  facecolor=[174/255,174/255,159/255],
+                                  linewidth=0,
+                                  zorder=999)
+        ax.add_patch(ring)
+        return None
     #     # ax.add_patch(Wedge((hour, day), .2, 0, 360, width=0.05, color=light_color, zorder=1000))
     #     return None
-
+    else:
+        moon_phase += 0.0001
     if mares != True:
         if moon_phase < 25:
             moon_phase = 25
         if moon_phase > 335:
-            moon_phase = 335 #蛾眉月太细看不见，这里直接加粗点
+            moon_phase = 335  #蛾眉月太细看不见，这里直接加粗点
 
     moon_phase = degToRad(moon_phase)
 
@@ -156,8 +172,7 @@ def draw_moon_symbol(ax,
         shadow = edge[edge[:, 1] <= 0, :]
 
     # global affine transformation
-    if mares == True:
-        zoom_factor *= 1.3
+
 
     M_zoom = np.array([[zoom_factor, 0], [0, zoom_factor * y_zoom_factor]])
 
@@ -195,9 +210,9 @@ def draw_moon_symbol(ax,
             shadow_codes[0] = mpath.Path.MOVETO
             shadow_path = mpath.Path(shadow, shadow_codes)
             shadow_patch = mpatches.PathPatch(shadow_path,
-                                                facecolor=[shadow_color] * 3,
-                                                linewidth=0,
-                                                zorder=999)
+                                              facecolor=[shadow_color] * 3,
+                                              linewidth=0,
+                                              zorder=999)
             ax.add_patch(shadow_patch)
         # Lunar mare patch
 
@@ -205,7 +220,7 @@ def draw_moon_symbol(ax,
 
         M_rotation_mare = np.array([[np.cos(pole_angle), -np.sin(pole_angle)],
                                     [np.sin(pole_angle),
-                                        np.cos(pole_angle)]])
+                                     np.cos(pole_angle)]])
 
         def affine_mare(vectors):
             vectors = vectors.T
@@ -218,13 +233,13 @@ def draw_moon_symbol(ax,
         for lm in lms:
             lm = affine_mare(lm)
             lm_codes = np.ones(len(lm),
-                                dtype=mpath.Path.code_type) * mpath.Path.LINETO
+                               dtype=mpath.Path.code_type) * mpath.Path.LINETO
             lm_codes[0] = mpath.Path.MOVETO
             lm_path = mpath.Path(lm, lm_codes)
             lm_patch = mpatches.PathPatch(lm_path,
-                                            facecolor=[0.3, 0.3, 0.3, 0.4],
-                                            linewidth=0,
-                                            zorder=1000)
+                                          facecolor=[0.3, 0.3, 0.3, 0.4],
+                                          linewidth=0,
+                                          zorder=1000)
             ax.add_patch(lm_patch)
 
 
@@ -234,13 +249,13 @@ if __name__ == '__main__':
     plt.subplot(111)
     ax = plt.gca()
     draw_moon_symbol(ax,
-                   time,
-                   lms,
-                   day=0,
-                   hour=0,
-                   mares=True,
-                   zoom_factor=0.7 / 1.3,
-                   y_zoom_factor=0.5)
+                     time,
+                     lms,
+                     day=0,
+                     hour=0,
+                     mares=True,
+                     zoom_factor=0.7 / 1.3,
+                     y_zoom_factor=0.5)
     ax.set_ylim(-1, 1)
     ax.set_xlim(-1, 1)
     ax.set_aspect(1)
