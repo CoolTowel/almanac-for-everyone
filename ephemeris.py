@@ -9,7 +9,7 @@ north40 = Observer(40, 116, 40) # Beijing
 north24 = Observer(24, 116, 5) # Amoy
 north52 = Observer(52, 4, 20) # Leiden
 
-obs = north52
+obs = north40
 time_zone = time_zone = (obs.longitude)/15
 
 year = datetime.date.today().year

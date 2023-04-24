@@ -27,7 +27,7 @@ north40 = Observer(40, 116, 40)  # Beijing
 north24 = Observer(24, 116, 5)  # Amoy
 north52 = Observer(52, 4, 20)  # Leiden
 
-obs = north24
+obs = north40
 time_zone = (obs.longitude) / 15
 
 # year number in Common Era (CE)
@@ -576,7 +576,7 @@ def main_plot(filename,
         fig.set_facecolor('grey')
 
     # plt.show()
-    fig.savefig('./output/' + str(obs.latitude) + '_' + filename + '.pdf')
+    fig.savefig('./output/'+ str(obs.latitude)+'/' + str(obs.latitude) + '_' + filename + '.pdf')
 
 
 if __name__ == '__main__':
